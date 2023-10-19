@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Mr Dice</title>
+  </head>
+  <body>
+    <main>
+      <div class="background">
+        <h1 class="mr-dice-game">Mr Dice</h1>
+        <div class="container">
+          <section class="player player-0 active-player">
+            <h2 class="player-name">Jogador 1</h2>
+            <p class="total-score" id="total-score-0">0</p>
+            <div class="score-container">
+              <p class="label-current">Pontuação Atual</p>
+              <p class="current-score" id="current-score-0">0</p>
+            </div>
+          </section>
+          <section class="player player-1">
+            <h2 class="player-name">Jogador 2</h2>
+            <p class="total-score" id="total-score-1">0</p>
+            <div class="score-container">
+              <p class="label-current">Pontuação Atual</p>
+              <p class="current-score" id="current-score-1">0</p>
+            </div>
+          </section>
+        </div>
+        <img
+          src="images/dice-6.png"
+          alt="jogo de dados"
+          class="dice dice-0 hidden"
+        />
+        <img
+          src="images/dice-6.png"
+          alt="jogo de dados"
+          class="dice dice-1 hidden"
+        />
+        <img
+          src="Images MrDice/mr dice cut.jpg"
+          alt="senhor dado"
+          class="mr-dice"
+        />
+        <p class="balao animation-1">Vamos jogar os dados!</p>
+        <button class="btn btn-rules">Regras</button>
+        <div class="container-rules">
+          <button class="close-rules">&times;</button>
+          <h2 class="title-rules">Regras</h2>
+          <p class="txt-rules">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </p>
+          <img
+            src="Images MrDice/mr dice.jpg"
+            alt="senhor de terno com cabeça de dado"
+            class="mr-dice-rules"
+          />
+        </div>
+        <button class="btn btn-restart">Reiniciar</button>
+        <button class="btn btn-roll">🎲Jogar Dados!🎲</button>
+        <button class="btn btn-hold">Manter!</button>
+      </div>
+      <div class="rules-background"></div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
