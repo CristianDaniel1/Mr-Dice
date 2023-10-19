@@ -130,9 +130,9 @@ btnRoll.addEventListener('click', function () {
     });
     // Verifica se o jogador atual teve sorte (duplo 6)
     if (randomDice.every(dice => dice === 6)) {
-      // No caso de que não tenha pontos antes, não multiplicará x2
+      // No caso de que pontos = 0, não multiplicará x2
       if (currentScore === 0) currentScore += 12;
-      else currentScore *= 2;
+      else (currentScore *= 2) + 12;
       doubleDice(randomDice);
       message(mrDiceLuck);
       // Verifica se todos os dados > 1, somando pontos
@@ -164,8 +164,11 @@ btnHold.addEventListener('click', function () {
     document.getElementById(`total-score-${activePlayer}`).textContent =
       scores[activePlayer];
     // Finaliza o jogo se o jogador tiver >= 150 pontos
-    if (scores[activePlayer] >= 150) {
+    if (scores[activePlayer] >= 120) {
       playing = false;
+      currentScore = 0;
+      updateCurrent(activePlayer);
+      // Loop para esconder dados
       dices.forEach((_, i) => dices[i].classList.add('hidden'));
       msgMrDice.textContent = `Fim de jogo! E o vencedor é o jogador ${
         activePlayer + 1
