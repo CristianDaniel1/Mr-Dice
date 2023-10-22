@@ -19,7 +19,7 @@ const btnHold = document.querySelector('.btn-hold');
 const btnRestart = document.querySelector('.btn-restart');
 
 // Declaração das variáveis globais
-let currentScore, activePlayer, scores, playing;
+let currentScore, activePlayer, scores, playing, activeAnimation;
 
 //////// Condições iniciais do jogo ////////
 const start = function () {
@@ -101,23 +101,51 @@ const switchPlayer = () => {
   player1.classList.toggle('active-player');
 };
 
+// Temporizador para remover animação
+const DicetimerOut = (index, animation, time) => {
+  setTimeout(() => dices[index].classList.remove(animation), time);
+};
+
 // Exibir os dados duplos de acordo com os argumentos (dados aleatórios iguais)
 const doubleDice = random =>
-  dices.forEach(
-    (_, i) => (dices[i].src = `images/dice-${random[i]}-${random[i]}.png`)
-  );
+  dices.forEach((_, i) => {
+    dices[i].classList.add('double-animation');
+    dices[i].src = `images/dice-${random[i]}-${random[i]}.png`;
+    DicetimerOut(i, 'double-animation', 1200);
+  });
 
 // ADD de animação "girar" cada 0.5s
-const rotateAnimation = () =>
+const rotateAnimation = () => {
+  activeAnimation = true;
   dices.forEach((_, i) => {
     dices[i].classList.add('rotate-animation');
-    setTimeout(() => dices[i].classList.remove('rotate-animation'), 500);
+    DicetimerOut(i, 'rotate-animation', 500);
   });
+};
+
+// Animação de "dano", ocorre quando perde os pontos atuais
+const damageAnimation = () => {
+  const currentAnimation = document.getElementById(
+    `current-score-${activePlayer}`
+  );
+  currentAnimation.classList.add('damage-animation');
+  setTimeout(() => currentAnimation.classList.remove('damage-animation'), 1000);
+};
+
+const holdAnimation = () => {
+  const totScoreAnimation = document.getElementById(
+    `total-score-${activePlayer}`
+  );
+  totScoreAnimation.classList.add('hold-animation');
+  setTimeout(() => totScoreAnimation.classList.remove('hold-animation'), 1500);
+};
 
 //////// Funcionalidade de jogar/rolar os dados ////////
 btnRoll.addEventListener('click', function () {
-  // Se ainda estiverem jogando
-  if (playing) {
+  // Se ainda estiverem jogando e a animação dos dados estar finalizada
+  if (playing && !activeAnimation) {
+    // Temporuzador para rolar dados
+    setTimeout(() => (activeAnimation = false), 500);
     const randomDice = [
       Math.trunc(Math.random() * 6) + 1,
       Math.trunc(Math.random() * 6) + 1,
@@ -149,7 +177,8 @@ btnRoll.addEventListener('click', function () {
         message(mrDiceUnlucky);
         // No caso de que pelo menos um dado inclua "1"
       } else if (randomDice.includes(1)) message(mrDiceSwitch);
-      // Troca de jogador
+      // Troca de jogador e exibe animação de perda de pontos
+      damageAnimation();
       switchPlayer();
     }
     // Atualiza a pontuação atual do jogador atual
@@ -163,6 +192,7 @@ btnHold.addEventListener('click', function () {
     scores[activePlayer] += currentScore;
     document.getElementById(`total-score-${activePlayer}`).textContent =
       scores[activePlayer];
+    holdAnimation();
     // Finaliza o jogo se o jogador tiver >= 150 pontos
     if (scores[activePlayer] >= 120) {
       playing = false;
