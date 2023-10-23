@@ -20,6 +20,7 @@ const btnRestart = document.querySelector('.btn-restart');
 
 // Declaração das variáveis globais
 let currentScore, activePlayer, scores, playing, activeAnimation;
+let randomDice = [0, 0];
 
 //////// Condições iniciais do jogo ////////
 const start = function () {
@@ -67,6 +68,11 @@ const mrDiceUnlucky = [
   'O jogo não foi feito para ser justo...',
   'Haha! Adoro quando isso acontece!',
   'Auch! Duplo errado né?',
+];
+
+const mrDiceGreen = [
+  'Duplo 3! Soma +6 nos Pontos Totais!',
+  'Dados verdes! +6 pontos garantidos',
 ];
 
 const mrDiceSwitch = [
@@ -132,6 +138,7 @@ const damageAnimation = () => {
   setTimeout(() => currentAnimation.classList.remove('damage-animation'), 1000);
 };
 
+// Animação de "Manter" pontos ou transferir para pontos totais
 const holdAnimation = () => {
   const totScoreAnimation = document.getElementById(
     `total-score-${activePlayer}`
@@ -140,13 +147,21 @@ const holdAnimation = () => {
   setTimeout(() => totScoreAnimation.classList.remove('hold-animation'), 1500);
 };
 
+// Funcianalidade para verificar dados duplos
+const everyDoubleDice = double => {
+  if (randomDice.every(dice => dice === double)) {
+    doubleDice(randomDice);
+    return true;
+  }
+};
+
 //////// Funcionalidade de jogar/rolar os dados ////////
 btnRoll.addEventListener('click', function () {
   // Se ainda estiverem jogando e a animação dos dados estar finalizada
   if (playing && !activeAnimation) {
     // Temporuzador para rolar dados
     setTimeout(() => (activeAnimation = false), 500);
-    const randomDice = [
+    randomDice = [
       Math.trunc(Math.random() * 6) + 1,
       Math.trunc(Math.random() * 6) + 1,
     ];
@@ -156,24 +171,32 @@ btnRoll.addEventListener('click', function () {
       dices[i].src = `images/dice-${randomDice[i]}.png`;
       rotateAnimation();
     });
+    // Seleção dos pontos totais do jogador atual
+    const totalScoreActive = document.getElementById(
+      `total-score-${activePlayer}`
+    );
+
     // Verifica se o jogador atual teve sorte (duplo 6)
-    if (randomDice.every(dice => dice === 6)) {
+    if (everyDoubleDice(6)) {
       // No caso de que pontos = 0, não multiplicará x2
       if (currentScore === 0) currentScore += 12;
       else (currentScore *= 2) + 12;
-      doubleDice(randomDice);
       message(mrDiceLuck);
+      // Se o jogador conseguir duplo 3
+    } else if (everyDoubleDice(3)) {
+      scores[activePlayer] += 6;
+      totalScoreActive.textContent = scores[activePlayer];
+      holdAnimation();
+      message(mrDiceGreen);
       // Verifica se todos os dados > 1, somando pontos
     } else if (randomDice.every(dice => dice > 1)) {
       currentScore += randomDice.reduce((acc, cur) => acc + cur, 0);
       message(mrDiceRoll);
     } else {
       // Se o jogador atual teve azar (duplo 1)
-      if (randomDice.every(dice => dice === 1)) {
+      if (everyDoubleDice(1)) {
         scores[activePlayer] /= 2;
-        document.getElementById(`total-score-${activePlayer}`).textContent =
-          scores[activePlayer];
-        doubleDice(randomDice);
+        totalScoreActive.textContent = scores[activePlayer];
         message(mrDiceUnlucky);
         // No caso de que pelo menos um dado inclua "1"
       } else if (randomDice.includes(1)) message(mrDiceSwitch);
@@ -194,13 +217,13 @@ btnHold.addEventListener('click', function () {
       scores[activePlayer];
     holdAnimation();
     // Finaliza o jogo se o jogador tiver >= 150 pontos
-    if (scores[activePlayer] >= 120) {
+    if (scores[activePlayer] >= 150) {
       playing = false;
       currentScore = 0;
       updateCurrent(activePlayer);
       // Loop para esconder dados
       dices.forEach((_, i) => dices[i].classList.add('hidden'));
-      msgMrDice.textContent = `Fim de jogo! E o vencedor é o jogador ${
+      msgMrDice.textContent = `Fim de jogo! E o vencedor é o Jogador ${
         activePlayer + 1
       }!`;
       document
