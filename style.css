@@ -333,11 +333,9 @@ main {
   * {
     font-size: 0.8rem;
   }
-
   .player-name {
     font-size: 2.2rem;
   }
-
   .balao {
     font-size: 1.6rem;
   }
@@ -353,7 +351,6 @@ main {
   * {
     font-size: 0.6rem;
   }
-
   main {
     align-items: center;
   }
@@ -371,7 +368,7 @@ main {
   }
   .balao {
     font-size: 1.5rem;
-    top: -5.5rem;
+    top: -6.5rem;
     left: 15rem;
     padding: 1rem;
     max-width: 20rem;
@@ -385,10 +382,11 @@ main {
     margin: 2rem;
   }
   .player-name {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
+  .mr-dice-game,
   .total-score {
-    margin: 0;
+    font-size: 2.5rem;
   }
   .player-1 {
     flex-flow: column-reverse;
@@ -426,5 +424,17 @@ main {
   }
   .btn-rules {
     top: -4rem;
+  }
+  .container-rules {
+    top: 35%;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  * {
+    font-size: 0.45rem;
+  }
+  main {
+    align-items: flex-end;
   }
 }
