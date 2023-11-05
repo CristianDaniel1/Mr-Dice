@@ -17,6 +17,10 @@ const btnRules = document.querySelector('.btn-rules');
 const btnRoll = document.querySelector('.btn-roll');
 const btnHold = document.querySelector('.btn-hold');
 const btnRestart = document.querySelector('.btn-restart');
+const btnConfig = document.querySelector('.btn-costumization');
+
+const inputNewName1 = document.getElementById('name-1');
+const inputNewName2 = document.getElementById('name-2');
 
 // Declaração das variáveis globais
 let currentScore, activePlayer, scores, playing, activeAnimation;
@@ -90,7 +94,7 @@ const mrDiceHold = [
 // Seleção aleatória de uma array de mensagens de Mr Dice
 const message = msgs => {
   const msg = Math.trunc(Math.random() * msgs.length);
-  return (msgMrDice.textContent = msgs[msg]);
+  msgMrDice.textContent = msgs[msg];
 };
 
 // Atualiza a pontuação atual do jogador
@@ -176,13 +180,12 @@ btnRoll.addEventListener('click', function () {
       `total-score-${activePlayer}`
     );
 
-    // Verifica se o jogador atual teve sorte (duplo 6)
     if (everyDoubleDice(6)) {
       // No caso de que pontos = 0, não multiplicará x2
       if (currentScore === 0) currentScore += 12;
       else (currentScore *= 2) + 12;
+
       message(mrDiceLuck);
-      // Se o jogador conseguir duplo 3
     } else if (everyDoubleDice(3)) {
       scores[activePlayer] += 6;
       totalScoreActive.textContent = scores[activePlayer];
@@ -193,7 +196,6 @@ btnRoll.addEventListener('click', function () {
       currentScore += randomDice.reduce((acc, cur) => acc + cur, 0);
       message(mrDiceRoll);
     } else {
-      // Se o jogador atual teve azar (duplo 1)
       if (everyDoubleDice(1)) {
         scores[activePlayer] /= 2;
         totalScoreActive.textContent = scores[activePlayer];
@@ -221,7 +223,7 @@ btnHold.addEventListener('click', function () {
       playing = false;
       currentScore = 0;
       updateCurrent(activePlayer);
-      // Loop para esconder dados
+
       dices.forEach((_, i) => dices[i].classList.add('hidden'));
       msgMrDice.textContent = `Fim de jogo! E o vencedor é o Jogador ${
         activePlayer + 1
@@ -256,9 +258,60 @@ const closeRules = () => {
 
 btnRulesClose.addEventListener('click', closeRules);
 backgroundCloseRules.addEventListener('click', closeRules);
-// Fechar as regras através da tecla "Esc"
+
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') {
     if (!rules.classList.contains('hidden')) closeRules();
   }
+});
+
+//////// UPDATE - MUDAR NOME ////////
+const changeName = name => {
+  if (name.value && name.value.length < 15)
+    document.getElementById(`player-${name.id}`).textContent = name.value;
+};
+
+btnConfig.addEventListener('click', function () {
+  document.querySelector('.container-costumization').classList.toggle('hidden');
+  changeName(inputNewName1);
+  changeName(inputNewName2);
+});
+
+//////// UPDATE - ESTILOS VISUAIS ////////
+const styleContainer = document.querySelector('.style-container');
+
+const pigGameStyle = {
+  primaryColor: '#c7365f',
+  secondaryColor: '#c7365f',
+  gradientColor: 'linear-gradient(to top left, #753682 0%, #bf2e34 100%)',
+};
+
+const classicStyle = {
+  primaryColor: '#59067a',
+  secondaryColor: '#8600bb',
+  gradientColor: 'linear-gradient(45deg, #480463, #7800bd)',
+};
+
+const blueStyle = {
+  primaryColor: '#0010a3',
+  secondaryColor: '#0067bb',
+  gradientColor: 'linear-gradient(45deg, #042563, #0068bd)',
+};
+
+const applyStyle = function (styleColor) {
+  styleProperty('--gradient', styleColor.gradientColor);
+  styleProperty('--color-primary', styleColor.primaryColor);
+  styleProperty('--color-secondary', styleColor.secondaryColor);
+};
+
+const styleProperty = function (property, color) {
+  document.documentElement.style.setProperty(property, color);
+};
+
+const ChangeStyleGame = styleContainer.addEventListener('click', function (e) {
+  const id = e.target.id;
+
+  if (id === 'pig') applyStyle(pigGameStyle);
+  else if (id === 'sky') applyStyle(blueStyle);
+  else if (id === 'classic') applyStyle(classicStyle);
 });

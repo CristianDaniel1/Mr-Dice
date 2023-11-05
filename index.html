@@ -13,7 +13,7 @@
         <h1 class="mr-dice-game">Mr Dice</h1>
         <div class="container">
           <section class="player player-0 active-player">
-            <h2 class="player-name">Jogador 1</h2>
+            <h2 class="player-name" id="player-name-1">Jogador 1</h2>
             <p class="total-score" id="total-score-0">0</p>
             <div class="score-container">
               <p class="label-current">Pontuação Atual</p>
@@ -21,7 +21,7 @@
             </div>
           </section>
           <section class="player player-1">
-            <h2 class="player-name">Jogador 2</h2>
+            <h2 class="player-name" id="player-name-2">Jogador 2</h2>
             <p class="total-score" id="total-score-1">0</p>
             <div class="score-container">
               <p class="label-current">Pontuação Atual</p>
@@ -46,6 +46,26 @@
         />
         <p class="balao animation-1">Vamos jogar os dados!</p>
         <button class="btn btn-rules">Regras</button>
+        <button class="btn btn-restart">Reiniciar</button>
+        <button class="btn btn-costumization">⚙️</button>
+        <div class="container-costumization hidden">
+          <h4>Opções</h4>
+          <p class="title-configs">Alterar nomes [máx 15]</p>
+          <div class="names-container">
+            <input type="text" class="name-players" id="name-1" />
+            <input type="text" class="name-players" id="name-2" />
+          </div>
+          <p class="title-configs">Pontos para Vencer</p>
+          <input type="radio" name="points-winner" id="fast" /> 100
+          <input type="radio" name="points-winner" id="normal" /> 150
+          <input type="radio" name="points-winner" id="long" /> 200
+          <p class="title-configs">Estilo Visual</p>
+          <div class="style-container">
+            <button class="btn-style" id="classic">Clássico</button>
+            <button class="btn-style" id="pig">Pig Game</button>
+            <button class="btn-style" id="sky">Blue</button>
+          </div>
+        </div>
         <div class="container-rules">
           <button class="close-rules">&times;</button>
           <h2 class="title-rules">Regras</h2>
@@ -75,7 +95,6 @@
             class="mr-dice-rules"
           />
         </div>
-        <button class="btn btn-restart">Reiniciar</button>
         <button class="btn btn-roll">🎲Jogar Dados!🎲</button>
         <button class="btn btn-hold">Manter!</button>
       </div>
