@@ -421,7 +421,7 @@ main {
   .label-current,
   .txt-rules,
   li {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
   }
 }
 
@@ -480,15 +480,22 @@ main {
   }
   .btn-roll,
   .btn-hold {
-    rotate: 270deg;
+    top: 52rem;
   }
   .btn-roll {
-    top: 25rem;
-    left: 23rem;
+    left: 10rem;
   }
   .btn-hold {
-    top: 12rem;
     left: 25rem;
+  }
+  .btn-costumization {
+    left: 2rem;
+    top: 1rem;
+  }
+  .container-costumization {
+    top: 10rem;
+    left: 5rem;
+    z-index: 10;
   }
   .txt-rules {
     width: 100%;
