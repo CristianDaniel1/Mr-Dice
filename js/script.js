@@ -289,7 +289,7 @@ const pigGameStyle = {
 const classicStyle = {
   primaryColor: '#59067a',
   secondaryColor: '#8600bb',
-  gradientColor: 'linear-gradient(45deg, #480463, #7800bd)',
+  gradientColor: 'linear-gradient(to top right, #3b0152, #7800bd)',
 };
 
 const blueStyle = {

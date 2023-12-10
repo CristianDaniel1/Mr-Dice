@@ -9,9 +9,9 @@
   </head>
   <body>
     <main>
-      <div class="background">
+      <div class="container">
         <h1 class="mr-dice-game">Mr Dice</h1>
-        <div class="container">
+        <div class="container__players">
           <section class="player player-0 active-player">
             <h2 class="player-name" id="player-name-1">Jogador 1</h2>
             <p class="total-score" id="total-score-0">0</p>
@@ -44,16 +44,28 @@
           alt="senhor dado"
           class="mr-dice"
         />
-        <p class="balao animation-1">Vamos jogar os dados!</p>
-        <button class="btn btn-rules">Regras</button>
-        <button class="btn btn-restart">Reiniciar</button>
-        <button class="btn btn-costumization">⚙️</button>
+        <p class="balao">Vamos jogar os dados!</p>
+        <div class="container__btn-header">
+          <button class="btn__header btn-restart">Reiniciar</button>
+          <button class="btn__header btn-rules">Regras</button>
+        </div>
+        <button class="btn-costumization">⚙️</button>
         <div class="container-costumization hidden">
           <h4>Opções</h4>
           <p class="title-configs">Alterar nomes [máx 15]</p>
           <div class="names-container">
-            <input type="text" class="name-players" id="name-1" />
-            <input type="text" class="name-players" id="name-2" />
+            <input
+              type="text"
+              class="name-players"
+              placeholder="Jogador 1"
+              id="name-1"
+            />
+            <input
+              type="text"
+              class="name-players"
+              placeholder="Jogador 2"
+              id="name-2"
+            />
           </div>
           <p class="title-configs">Pontos para Vencer</p>
           <input type="radio" name="points-winner" id="fast" /> 100
@@ -95,8 +107,10 @@
             class="mr-dice-rules"
           />
         </div>
-        <button class="btn btn-roll">🎲Jogar Dados!🎲</button>
-        <button class="btn btn-hold">Manter!</button>
+        <div class="container__btn-playing">
+          <button class="btn__playing btn-roll">🎲Jogar Dados!🎲</button>
+          <button class="btn__playing btn-hold">Manter!</button>
+        </div>
       </div>
       <div class="rules-background"></div>
     </main>
