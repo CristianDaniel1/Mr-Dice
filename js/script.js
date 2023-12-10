@@ -19,14 +19,20 @@ const btnHold = document.querySelector('.btn-hold');
 const btnRestart = document.querySelector('.btn-restart');
 const btnConfig = document.querySelector('.btn-costumization');
 
-const inputNewName1 = document.getElementById('name-1');
-const inputNewName2 = document.getElementById('name-2');
+const playerName0 = document.getElementById('name-1');
+const playerName1 = document.getElementById('name-2');
 
-// Declaração das variáveis globais
-let currentScore, activePlayer, scores, playing, activeAnimation;
+let currentScore,
+  activePlayer,
+  scores,
+  playing,
+  activeAnimation,
+  totalScoreActive;
+
 let randomDice = [0, 0];
+let winPoints = 150;
 
-//////// Condições iniciais do jogo ////////
+///////////// Condições iniciais do jogo //////////////
 const start = function () {
   playing = true;
   currentScore = 0;
@@ -47,49 +53,46 @@ const start = function () {
 };
 start();
 
-//////// Arrays de frases de Mr Dice ////////
-const mrDiceRoll = [
-  'Quer arriscar ou manter seus pontos?',
-  'Ok, ainda é a sua vez',
-  'Talvez seja melhor salvar seus pontos, o que deseja fazer?',
-  'Podia ser pior e podia ser melhor, e agora?',
-  'Pense bem, esses dados são aleatórios, que nem minhas frases',
-  'Mais uma vez?',
-  'Esses dados são injustos, pode acontecer qualquer coisa',
-  'Quer que eu lance os dados outra vez?',
-  'Posso jogar os dados mais uma vez, você decide',
-];
-
-const mrDiceLuck = [
-  'Ok, isso foi sorte',
-  'Pelo visto os dados tem um jogador favorito',
-  'Duplo 6! Baita sorte',
-  'Bons dados! Não acha melhor parar ai?',
-];
-
-const mrDiceUnlucky = [
-  'Dados azuis, Isso não é bom',
-  'O jogo não foi feito para ser justo...',
-  'Haha! Adoro quando isso acontece!',
-  'Auch! Duplo errado né?',
-];
-
-const mrDiceGreen = [
-  'Duplo 3! Soma +6 nos Pontos Totais!',
-  'Dados verdes! +6 pontos garantidos',
-];
-
-const mrDiceSwitch = [
-  'Que pena! Vez do próximo jogador',
-  'Dado com 1, bem fácil de acontecer. Próximo!',
-  'Hora da troca de jogador!',
-];
-
-const mrDiceHold = [
-  'Salvando pontos! Próximo jogador',
-  'Ok, pontos mantidos. Próximo',
-  'Talvez seja o melhor mesmo...Seguinte!',
-];
+/////////////// Frases de Mr Dice //////////////////////
+const mrDiceTalks = {
+  roll: [
+    'Quer arriscar ou manter seus pontos?',
+    'Ok, ainda é a sua vez',
+    'Talvez seja melhor salvar seus pontos, o que deseja fazer?',
+    'Podia ser pior e podia ser melhor, e agora?',
+    'Pense bem, esses dados são aleatórios, que nem minhas frases',
+    'Mais uma vez?',
+    'Esses dados são injustos, pode acontecer qualquer coisa',
+    'Quer que eu lance os dados outra vez?',
+    'Posso jogar os dados mais uma vez, você decide',
+  ],
+  luck: [
+    'Ok, isso foi sorte',
+    'Pelo visto os dados tem um jogador favorito',
+    'Duplo 6! Baita sorte',
+    'Bons dados! Não acha melhor parar ai?',
+  ],
+  unlucky: [
+    'Dados azuis, Isso não é bom',
+    'O jogo não foi feito para ser justo...',
+    'Haha! Adoro quando isso acontece!',
+    'Auch! Duplo errado né?',
+  ],
+  greenDices: [
+    'Duplo 3! Soma +6 nos Pontos Totais!',
+    'Dados verdes! +6 pontos garantidos',
+  ],
+  switchPlayer: [
+    'Que pena! Vez do próximo jogador',
+    'Dado com 1, bem fácil de acontecer. Próximo!',
+    'Hora da troca de jogador!',
+  ],
+  hold: [
+    'Salvando pontos! Próximo jogador',
+    'Ok, pontos mantidos. Próximo',
+    'Talvez seja o melhor mesmo...Seguinte!',
+  ],
+};
 
 // Seleção aleatória de uma array de mensagens de Mr Dice
 const message = msgs => {
@@ -97,12 +100,10 @@ const message = msgs => {
   msgMrDice.textContent = msgs[msg];
 };
 
-// Atualiza a pontuação atual do jogador
 const updateCurrent = player =>
   (document.getElementById(`current-score-${player}`).textContent =
     currentScore);
 
-// Funcionalidade de trocar de jogador
 const switchPlayer = () => {
   currentScore = 0;
   updateCurrent(activePlayer);
@@ -111,20 +112,11 @@ const switchPlayer = () => {
   player1.classList.toggle('active-player');
 };
 
-// Temporizador para remover animação
+/////////////////  Animações  ////////////////////
 const DicetimerOut = (index, animation, time) => {
   setTimeout(() => dices[index].classList.remove(animation), time);
 };
 
-// Exibir os dados duplos de acordo com os argumentos (dados aleatórios iguais)
-const doubleDice = random =>
-  dices.forEach((_, i) => {
-    dices[i].classList.add('double-animation');
-    dices[i].src = `images/dice-${random[i]}-${random[i]}.png`;
-    DicetimerOut(i, 'double-animation', 1200);
-  });
-
-// ADD de animação "girar" cada 0.5s
 const rotateAnimation = () => {
   activeAnimation = true;
   dices.forEach((_, i) => {
@@ -133,7 +125,6 @@ const rotateAnimation = () => {
   });
 };
 
-// Animação de "dano", ocorre quando perde os pontos atuais
 const damageAnimation = () => {
   const currentAnimation = document.getElementById(
     `current-score-${activePlayer}`
@@ -142,13 +133,36 @@ const damageAnimation = () => {
   setTimeout(() => currentAnimation.classList.remove('damage-animation'), 1000);
 };
 
-// Animação de "Manter" pontos ou transferir para pontos totais
 const holdAnimation = () => {
   const totScoreAnimation = document.getElementById(
     `total-score-${activePlayer}`
   );
   totScoreAnimation.classList.add('hold-animation');
   setTimeout(() => totScoreAnimation.classList.remove('hold-animation'), 1500);
+};
+
+////////////////////////////////////////////////////
+const rollDices = () => {
+  randomDice = [
+    Math.trunc(Math.random() * 6) + 1,
+    Math.trunc(Math.random() * 6) + 1,
+  ];
+};
+
+const doubleDice = random =>
+  dices.forEach((_, i) => {
+    dices[i].classList.add('double-animation');
+    dices[i].src = `img/dice-${random[i]}-${random[i]}.png`;
+    DicetimerOut(i, 'double-animation', 1200);
+  });
+
+const renderDices = () => {
+  dices.forEach((_, i) => {
+    dices[i].classList.remove('hidden');
+
+    dices[i].src = `img/dice-${randomDice[i]}.png`;
+    rotateAnimation();
+  });
 };
 
 // Funcianalidade para verificar dados duplos
@@ -159,54 +173,53 @@ const everyDoubleDice = double => {
   }
 };
 
+const checkDiceZero = () => {
+  if (randomDice.includes(1)) {
+    if (everyDoubleDice(1)) {
+      scores[activePlayer] /= 2;
+      totalScoreActive.textContent = scores[activePlayer];
+
+      message(mrDiceTalks.unlucky);
+    } else message(mrDiceTalks.switchPlayer);
+
+    damageAnimation();
+    switchPlayer();
+
+    return true;
+  }
+};
+
 //////// Funcionalidade de jogar/rolar os dados ////////
 btnRoll.addEventListener('click', function () {
-  // Se ainda estiverem jogando e a animação dos dados estar finalizada
-  if (playing && !activeAnimation) {
-    // Temporuzador para rolar dados
+  if (activeAnimation) return;
+
+  if (playing) {
     setTimeout(() => (activeAnimation = false), 500);
-    randomDice = [
-      Math.trunc(Math.random() * 6) + 1,
-      Math.trunc(Math.random() * 6) + 1,
-    ];
-    // Loop nos dados aleatórios para sua exibição
-    dices.forEach((_, i) => {
-      dices[i].classList.remove('hidden');
-      dices[i].src = `images/dice-${randomDice[i]}.png`;
-      rotateAnimation();
-    });
-    // Seleção dos pontos totais do jogador atual
-    const totalScoreActive = document.getElementById(
-      `total-score-${activePlayer}`
-    );
+
+    totalScoreActive = document.getElementById(`total-score-${activePlayer}`);
+
+    rollDices();
+    renderDices();
+    if (checkDiceZero()) return;
 
     if (everyDoubleDice(6)) {
-      // No caso de que pontos = 0, não multiplicará x2
-      if (currentScore === 0) currentScore += 12;
-      else (currentScore *= 2) + 12;
+      currentScore === 0
+        ? (currentScore += 12)
+        : (currentScore += (currentScore *= 2) + 12);
 
-      message(mrDiceLuck);
+      message(mrDiceTalks.luck);
     } else if (everyDoubleDice(3)) {
       scores[activePlayer] += 6;
       totalScoreActive.textContent = scores[activePlayer];
       holdAnimation();
-      message(mrDiceGreen);
-      // Verifica se todos os dados > 1, somando pontos
+
+      message(mrDiceTalks.greenDices);
     } else if (randomDice.every(dice => dice > 1)) {
       currentScore += randomDice.reduce((acc, cur) => acc + cur, 0);
-      message(mrDiceRoll);
-    } else {
-      if (everyDoubleDice(1)) {
-        scores[activePlayer] /= 2;
-        totalScoreActive.textContent = scores[activePlayer];
-        message(mrDiceUnlucky);
-        // No caso de que pelo menos um dado inclua "1"
-      } else if (randomDice.includes(1)) message(mrDiceSwitch);
-      // Troca de jogador e exibe animação de perda de pontos
-      damageAnimation();
-      switchPlayer();
+
+      message(mrDiceTalks.roll);
     }
-    // Atualiza a pontuação atual do jogador atual
+
     updateCurrent(activePlayer);
   }
 });
@@ -215,19 +228,23 @@ btnRoll.addEventListener('click', function () {
 btnHold.addEventListener('click', function () {
   if (playing) {
     scores[activePlayer] += currentScore;
+
     document.getElementById(`total-score-${activePlayer}`).textContent =
       scores[activePlayer];
+
     holdAnimation();
-    // Finaliza o jogo se o jogador tiver >= 150 pontos
-    if (scores[activePlayer] >= 150) {
+    // Jogador vence o jogo
+    if (scores[activePlayer] >= winPoints) {
       playing = false;
       currentScore = 0;
       updateCurrent(activePlayer);
 
       dices.forEach((_, i) => dices[i].classList.add('hidden'));
-      msgMrDice.textContent = `Fim de jogo! E o vencedor é o Jogador ${
-        activePlayer + 1
-      }!`;
+
+      msgMrDice.textContent = `Fim de jogo! ${
+        activePlayer === 0 ? playerName0.value : playerName1.value
+      } é o Vencedor!`;
+
       document
         .querySelector(`.player-${activePlayer}`)
         .classList.add('player-winner');
@@ -235,7 +252,7 @@ btnHold.addEventListener('click', function () {
         .querySelector(`.player-${activePlayer}`)
         .classList.remove('active-player');
     } else {
-      message(mrDiceHold);
+      message(mrDiceTalks.hold);
       switchPlayer();
     }
   }
@@ -244,13 +261,12 @@ btnHold.addEventListener('click', function () {
 // Reiniciar o jogo (Aplicar condições iniciais)
 btnRestart.addEventListener('click', start);
 
-//////// funcionalidade de abrir janela de regras do jogo ////////
+//////////////////// Regras do jogo ///////////////////////
 btnRules.addEventListener('click', function () {
   rules.classList.remove('hidden');
   backgroundCloseRules.classList.remove('hidden');
 });
 
-//////// Funcionalidade de fechar a janela de regras ////////
 const closeRules = () => {
   rules.classList.add('hidden');
   backgroundCloseRules.classList.add('hidden');
@@ -265,7 +281,7 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-//////// UPDATE - MUDAR NOME ////////
+//////////////////////  UPDATE 1.3  ////////////////////////
 const changeName = name => {
   if (name.value && name.value.length < 15)
     document.getElementById(`player-${name.id}`).textContent = name.value;
@@ -273,13 +289,20 @@ const changeName = name => {
 
 btnConfig.addEventListener('click', function () {
   document.querySelector('.container-costumization').classList.toggle('hidden');
-  changeName(inputNewName1);
-  changeName(inputNewName2);
+  changeName(playerName0);
+  changeName(playerName1);
 });
 
-//////// UPDATE - ESTILOS VISUAIS ////////
-const styleContainer = document.querySelector('.style-container');
+const containerPoints = document.querySelector('.container-points');
+containerPoints.addEventListener('click', function (e) {
+  const points = e.target.closest('.input-points');
+  if (!points) return;
 
+  winPoints = points.value;
+});
+
+// Opções de estilos visuais
+const styleContainer = document.querySelector('.style-container');
 const pigGameStyle = {
   primaryColor: '#c7365f',
   secondaryColor: '#c7365f',
@@ -310,8 +333,9 @@ const styleProperty = function (property, color) {
 
 const ChangeStyleGame = styleContainer.addEventListener('click', function (e) {
   const id = e.target.id;
+  if (!id) return;
 
   if (id === 'pig') applyStyle(pigGameStyle);
-  else if (id === 'sky') applyStyle(blueStyle);
-  else if (id === 'classic') applyStyle(classicStyle);
+  if (id === 'sky') applyStyle(blueStyle);
+  if (id === 'classic') applyStyle(classicStyle);
 });
