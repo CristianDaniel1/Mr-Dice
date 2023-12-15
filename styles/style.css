@@ -27,7 +27,7 @@ main {
   justify-content: center;
   align-items: flex-end;
   font-size: 1.5rem;
-  overflow-x: hidden;
+  overflow: hidden;
   background: var(--gradient);
   padding-top: 12rem;
 }
@@ -311,6 +311,7 @@ main {
   cursor: pointer;
   border: none;
   background: none;
+  z-index: 50;
 }
 
 /****************** CONFIGURAÇÕES **********************/
