@@ -20,6 +20,10 @@ body {
   overflow-x: hidden;
 }
 
+body {
+  background-color: var(--color-primary);
+}
+
 main {
   min-height: 100vh;
   min-height: 100svh;
