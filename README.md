@@ -1,7 +1,7 @@
 <img
   src="https://i.imgur.com/bpcKRUW.png"
   alt="jogo de dados"
-  width="600"
+  width="700"
 />
 
 # Mr Dice
