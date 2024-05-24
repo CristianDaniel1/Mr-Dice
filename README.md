@@ -1,4 +1,8 @@
-![Mr Dice](https://i.imgur.com/bpcKRUW.png)
+<img
+  src="https://i.imgur.com/bpcKRUW.png"
+  alt="jogo de dados"
+  width="600"
+/>
 
 # Mr Dice
 
