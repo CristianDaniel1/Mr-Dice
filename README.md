@@ -34,7 +34,7 @@ Os jogadores se revezam para lançar os dados e acumular pontos. Se um dos dados
   - **Dois dados com valor 6:** Os dados ficam dourados e os pontos do turno são multiplicados por 2.
   - **Dois dados com valor 3:** Os dados ficam verdes e 6 pontos são adicionados diretamente aos pontos totais.
   - **Dois dados com valor 1:** Os dados ficam azuis, o jogador perde metade dos pontos totais e a vez passa para o outro jogador.
-- **Configurações Personalizáveis:** Alterar tema/cor da interface, mudar os nomes dos jogadores e definir a pontuação para vencer (150, 200 ou 250 pontos).
+- **Configurações Personalizáveis:** Alterar tema/cor da interface, mudar os nomes dos jogadores e definir a pontuação para vencer (100, 150 ou 200 pontos).
 
 ## Tecnologias Utilizadas
 
